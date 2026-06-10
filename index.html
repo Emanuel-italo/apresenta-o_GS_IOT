@@ -239,14 +239,67 @@ h2.title{font-family:var(--display);font-weight:700;line-height:1.02;letter-spac
 .topic-list{display:grid;gap:9px;margin-top:6px}
 .topic{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:.78rem;
   border:1px solid var(--line);border-radius:9px;padding:11px 14px;background:rgba(0,0,0,.22);
-  transition:border-color .3s,background .3s,transform .3s}
+  transition:border-color .3s,background .3s,transform .3s; cursor: pointer; flex-wrap: wrap;}
 .topic:hover{border-color:var(--line-strong);background:rgba(88,199,224,.04);transform:translateX(4px)}
 .topic .dir{flex:0 0 auto;font-size:9px;letter-spacing:1px;padding:3px 7px;border-radius:5px;font-weight:700}
 .topic .dir.pub{color:var(--signal);background:rgba(88,199,224,.1);border:1px solid var(--signal-deep)}
 .topic .dir.sub{color:var(--harvest);background:rgba(232,168,92,.1);border:1px solid var(--harvest-deep)}
 .topic .path{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .topic .path b{color:var(--ink)}
+/* Estilos do menu sanfona explicativo */
+/* Estilos do Acordeão Semântico HTML5 */
+details.topic {
+  cursor: pointer;
+  transition: border-color .3s, background .3s;
+}
 
+/* O summary é o cabeçalho clicável. Mantém o layout alinhado em linha */
+summary.topic-header {
+  display: flex;
+  align-items: center;
+  list-style: none; /* Remove a seta padrão do HTML */
+  outline: none;
+}
+
+/* Remove a seta no Chrome/Safari */
+summary.topic-header::-webkit-details-marker {
+  display: none; 
+}
+
+/* Estilo quando a tag <details> está aberta */
+details.topic[open] {
+  background: rgba(88,199,224,.06);
+  border-color: var(--signal);
+}
+
+/* Texto descritivo */
+.topic-desc {
+  width: 100%;
+  font-family: var(--body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px dashed var(--line-strong);
+  animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* PREVINE A QUEBRA DO LAYOUT (O "flutuar" do quadro preto) */
+.topic-list {
+  max-height: 380px; /* Limita a altura máxima da coluna esquerda */
+  overflow-y: auto; /* Adiciona rolagem se a altura for ultrapassada */
+  padding-right: 10px;
+}
+
+/* Scrollbar futurista para combinar com o design do painel */
+.topic-list::-webkit-scrollbar { width: 4px; }
+.topic-list::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
 .crew{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
 .member{border:1px solid var(--line);border-radius:16px;padding:26px 22px;text-align:center;
   background:var(--panel);backdrop-filter:blur(12px);transition:transform .4s var(--ease),border-color .4s}
@@ -662,13 +715,54 @@ h2.title{font-family:var(--display);font-weight:700;line-height:1.02;letter-spac
         <h2 class="title reveal" style="--i:1">Telemetria &amp; <span class="accent">comandos</span>.</h2>
         <div class="grid g2">
           <div class="reveal" style="--i:2">
-            <div class="topic-list">
-              <div class="topic"><span class="dir pub">PUB</span><span class="path">…/RM561337/<b>status</b></span></div>
-              <div class="topic"><span class="dir pub">PUB</span><span class="path">…/RM561337/<b>sensor</b></span></div>
-              <div class="topic"><span class="dir pub">PUB</span><span class="path">…/RM561337/<b>alertas</b></span></div>
-              <div class="topic"><span class="dir sub">SUB</span><span class="path">…/RM561337/<b>cmd/modo</b></span></div>
-              <div class="topic"><span class="dir sub">SUB</span><span class="path">…/RM561337/<b>cmd/bomba</b></span></div>
-              <div class="topic"><span class="dir sub">SUB</span><span class="path">…/RM561337/<b>reset</b></span></div>
+<div class="topic-list">
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir pub">PUB</span>
+                <span class="path">…/RM561337/<b>status</b></span>
+                <div class="topic-desc">
+                  <b>Publish (Falar):</b> O sensor atualiza o painel avisando que está "Online" e operante.
+                </div>
+              </div>
+            
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir pub">PUB</span>
+                <span class="path">…/RM561337/<b>sensor</b></span>
+                <div class="topic-desc">
+                  <b>Publish (Falar):</b> O sensor envia os dados coletados em tempo real (ex: Umidade a 19.4%).
+                </div>
+              </div>
+            
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir pub">PUB</span>
+                <span class="path">…/RM561337/<b>alertas</b></span>
+                <div class="topic-desc">
+                  <b>Publish (Falar):</b> O sensor dispara um aviso urgente se detectar risco crítico de seca.
+                </div>
+              </div>
+            
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir sub">SUB</span>
+                <span class="path">…/RM561337/<b>cmd/modo</b></span>
+                <div class="topic-desc">
+                  <b>Subscribe (Escutar):</b> O equipamento fica ouvindo se o usuário, no painel, alterou de "Automático" para "Manual".
+                </div>
+              </div>
+            
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir sub">SUB</span>
+                <span class="path">…/RM561337/<b>cmd/bomba</b></span>
+                <div class="topic-desc">
+                  <b>Subscribe (Escutar):</b> O equipamento aguarda e escuta a ordem remota para ligar ou desligar a bomba de água.
+                </div>
+              </div>
+            
+              <div class="topic" onclick="this.classList.toggle('open')">
+                <span class="dir sub">SUB</span>
+                <span class="path">…/RM561337/<b>reset</b></span>
+                <div class="topic-desc">
+                  <b>Subscribe (Escutar):</b> Uma via de escuta de segurança caso o sistema precise ser reiniciado remotamente.
+                </div>
+              </div>
             </div>
             <p class="lead" style="margin-top:18px;font-size:.95rem">Namespace <span class="mono">orbitalsense/fiap2tds/&lt;RM&gt;/…</span> — bidirecional, em JSON, sobre o broker público HiveMQ.</p>
           </div>
